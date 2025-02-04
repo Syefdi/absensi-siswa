@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi TKJ 3</title>
+    <title>Absensi Siswa</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
         body {
@@ -25,25 +25,43 @@
         .btn {
             margin: 2px;
         }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .btn {
+                font-size: 12px;
+                padding: 5px 8px;
+            }
+            table {
+                font-size: 14px;
+            }
+            .status-text {
+                display: block;
+                margin-top: 5px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2 class="text-center mb-4">Absensi Karyawan</h2>
 
-        <table class="table table-bordered text-center">
-            <thead class="table-primary">
-                <tr>
-                    <th>Nama</th>
-                    <th>Status Kehadiran</th>
-                </tr>
-            </thead>
-            <tbody id="attendanceList">
-                <!-- Generate 36 rows dynamically using JavaScript -->
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Nama</th>
+                        <th>Status Kehadiran</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceList">
+                    <!-- Generate 36 rows dynamically using JavaScript -->
+                </tbody>
+            </table>
+        </div>
 
-        <button id="downloadTXT" class="btn btn-success">Download TXT</button>
+        <button id="downloadCSV" class="btn btn-success">Download CSV</button>
     </div>
 
     <script>
@@ -94,17 +112,17 @@
             }
         }
 
-        document.getElementById("downloadTXT").addEventListener("click", function() {
+        document.getElementById("downloadCSV").addEventListener("click", function() {
             let rows = document.querySelectorAll("#attendanceList tr");
-            let txtContent = "";
+            let csvContent = "";
             
             rows.forEach(row => {
                 let name = row.cells[0].textContent;
                 let status = row.querySelector(".status-text").textContent;
-                txtContent += `${name} = ${status}\n`;
+                csvContent += `${name} = ${status}\n`;
             });
 
-            let blob = new Blob([txtContent], { type: "text/plain" });
+            let blob = new Blob([csvContent], { type: "text/plain" });
             let a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
             a.download = "absensi.txt";
