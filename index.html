@@ -61,7 +61,16 @@
             </table>
         </div>
 
-        <button id="downloadCSV" class="btn btn-success">Download TXT</button>
+        <label for="filterStatus" class="form-label">Pilih kategori untuk download:</label>
+        <select id="filterStatus" class="form-select mb-2">
+            <option value="All">Semua</option>
+            <option value="Hadir">Hadir</option>
+            <option value="Izin">Izin</option>
+            <option value="Sakit">Sakit</option>
+            <option value="Alpha">Alpha</option>
+        </select>
+
+        <button id="downloadCSV" class="btn btn-success">Download</button>
     </div>
 
     <script>
@@ -114,18 +123,21 @@
 
         document.getElementById("downloadCSV").addEventListener("click", function() {
             let rows = document.querySelectorAll("#attendanceList tr");
+            let selectedStatus = document.getElementById("filterStatus").value;
             let csvContent = "";
             
             rows.forEach(row => {
                 let name = row.cells[0].textContent;
                 let status = row.querySelector(".status-text").textContent;
-                csvContent += `${name} = ${status}\n`;
+                if (selectedStatus === "All" || status === selectedStatus) {
+                    csvContent += `${name} = ${status}\n`;
+                }
             });
 
             let blob = new Blob([csvContent], { type: "text/plain" });
             let a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
-            a.download = "absensi.txt";
+            a.download = `absensi_${selectedStatus}.txt`;
             a.click();
         });
     </script>
